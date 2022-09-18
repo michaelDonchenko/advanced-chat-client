@@ -1,0 +1,63 @@
+import React from 'react'
+import styled from 'styled-components'
+import {RiMenu3Fill} from 'react-icons/ri'
+import {BiSearch} from 'react-icons/bi'
+
+const ActionsHeader: React.FC = () => {
+  return (
+    <Container>
+      <Heading>
+        <h2>Chats</h2>
+        <MenuIcon size={22} />
+      </Heading>
+
+      <SearchContainer>
+        <SearchIcon size={16} />
+        <SearchBar placeholder='Search for chats' />
+      </SearchContainer>
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+`
+
+const Heading = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+`
+
+const MenuIcon = styled(RiMenu3Fill)`
+  cursor: pointer;
+  margin-left: auto;
+  fill: ${({theme}) => theme.palette.primary.light};
+`
+const SearchIcon = styled(BiSearch)`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 6px;
+`
+
+const SearchContainer = styled.div`
+  position: relative;
+  width: 100%;
+`
+
+const SearchBar = styled.input`
+  -webkit-appearance: none;
+  outline: none;
+  padding: 4px 4px 4px 26px;
+  font-size: 18px;
+  background-color: ${({theme}) => theme.palette.background.light};
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+`
+
+export default ActionsHeader
