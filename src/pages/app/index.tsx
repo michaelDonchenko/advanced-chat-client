@@ -3,7 +3,7 @@ import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import React from 'react'
 import styled from 'styled-components'
-import {IoArrowRedoSharp} from 'react-icons/io5'
+import {IoSendSharp} from 'react-icons/io5'
 
 const App: React.FC = () => {
   return (
@@ -56,7 +56,7 @@ const InputContainer = styled.div`
   align-items: center;
 `
 
-const StyledIcon = styled(IoArrowRedoSharp)`
+const StyledIcon = styled(IoSendSharp)`
   fill: ${({theme}) => theme.palette.primary.light};
   width: 30px;
   height: 30px;

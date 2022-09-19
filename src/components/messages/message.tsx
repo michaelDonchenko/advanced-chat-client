@@ -25,7 +25,7 @@ const StyledMessage = styled.div<{isMyMessage: boolean}>`
   width: fit-content;
   max-width: 500px;
   border-radius: 15px;
-  padding: 6px 10px;
+  padding: 4px 8px;
   background-color: ${({theme, isMyMessage}) => (isMyMessage ? theme.palette.primary.main : theme.palette.gray.main)};
   margin-bottom: 8px;
   margin-left: ${({isMyMessage}) => (isMyMessage ? 'auto' : '0')};
