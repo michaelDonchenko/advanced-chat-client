@@ -1,11 +1,15 @@
-import MessageInput from '@/components/inputs/message-input'
-import Messages from '@/components/messages'
-import SideBar from '@/components/side-bar'
 import React from 'react'
 import styled from 'styled-components'
 import {IoSendSharp} from 'react-icons/io5'
 
+import MessageInput from '@/components/inputs/message-input'
+import Messages from '@/components/messages'
+import SideBar from '@/components/side-bar'
+import useSocket from '@/hooks/useSocket'
+
 const App: React.FC = () => {
+  const socket = useSocket()
+
   return (
     <Container>
       <SidebarWrapper>
