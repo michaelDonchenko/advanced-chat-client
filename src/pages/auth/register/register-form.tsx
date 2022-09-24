@@ -1,15 +1,15 @@
+import {register} from '@/api/auth-api'
 import Button from '@/components/buttons/button'
 import TextInput from '@/components/inputs/text-input'
+import {RegisterCredentials} from '@/interfaces/auth-interfaces'
 import {Formik, Form, FormikHelpers} from 'formik'
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
-
-interface FormValues {
-  username: string
-  email: string
-  password: string
-}
+import {useAppDispatch} from '@/store/hooks'
+import {register as registerDispatch} from '@/store/reducers/authSlice'
+import {setLocalStorage} from '@/utils/localStorage'
+import errorHandler from '@/utils/error-handler'
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -23,15 +23,33 @@ const RegisterSchema = Yup.object().shape({
     .required('This field is required'),
 })
 
-const initialValues: FormValues = {
+const initialValues: RegisterCredentials = {
   username: '',
   email: '',
   password: '',
 }
 
 const RegisterForm = () => {
-  const handleSubmit = useCallback((values: FormValues, helpers: FormikHelpers<FormValues>) => {
-    helpers.resetForm()
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+
+  const handleSubmit = useCallback(async (values: RegisterCredentials, helpers: FormikHelpers<RegisterCredentials>) => {
+    try {
+      setLoading(true)
+      const {data} = await register(values)
+
+      if (data) {
+        dispatch(registerDispatch(data))
+        setLocalStorage('user', data.user)
+        setLocalStorage('jwt', data.jwt)
+        setLocalStorage('isAuthenticated', true)
+      }
+    } catch (error) {
+      setError(errorHandler(error))
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   return (
@@ -45,7 +63,9 @@ const RegisterForm = () => {
           <TextInput name='username' type='text' label='Username' />
           <TextInput name='email' type='email' label='Email' />
           <TextInput name='password' type='password' label='Password' />
-          <Button>Register</Button>
+
+          <Button>{loading ? 'Loading...' : 'Register'}</Button>
+          <ErrorContainer>{error}</ErrorContainer>
         </Form>
       </Formik>
     </Container>
@@ -55,6 +75,11 @@ const RegisterForm = () => {
 const Container = styled.div`
   margin: auto 0;
   padding: 16px;
+`
+
+const ErrorContainer = styled.div`
+  color: ${({theme}) => theme.palette.error};
+  margin: 10px 0;
 `
 
 export default RegisterForm

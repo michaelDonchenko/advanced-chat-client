@@ -1,7 +1,12 @@
+import {login} from '@/api/auth-api'
 import Button from '@/components/buttons/button'
 import TextInput from '@/components/inputs/text-input'
+import {useAppDispatch} from '@/store/hooks'
+import {login as loginDispatch} from '@/store/reducers/authSlice'
+import errorHandler from '@/utils/error-handler'
+import {setLocalStorage} from '@/utils/localStorage'
 import {Formik, Form, FormikHelpers} from 'formik'
-import {useCallback} from 'react'
+import {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -27,8 +32,26 @@ const initialValues: FormValues = {
 }
 
 const LoginForm = () => {
-  const handleSubmit = useCallback((values: FormValues, helpers: FormikHelpers<FormValues>) => {
-    helpers.resetForm()
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+
+  const handleSubmit = useCallback(async (values: FormValues, helpers: FormikHelpers<FormValues>) => {
+    try {
+      setLoading(true)
+      const {data} = await login(values)
+
+      if (data) {
+        dispatch(loginDispatch(data))
+        setLocalStorage('user', data.user)
+        setLocalStorage('jwt', data.jwt)
+        setLocalStorage('isAuthenticated', true)
+      }
+    } catch (error) {
+      setError(errorHandler(error))
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   return (
@@ -41,7 +64,8 @@ const LoginForm = () => {
         <Form>
           <TextInput name='username' type='text' label='Username' />
           <TextInput name='password' type='password' label='Password' />
-          <Button>Login</Button>
+          <Button>{loading ? 'Loading...' : 'Login'}</Button>
+          <ErrorContainer>{error}</ErrorContainer>
         </Form>
       </Formik>
     </Container>
@@ -51,6 +75,11 @@ const LoginForm = () => {
 const Container = styled.div`
   margin: auto 0;
   padding: 16px;
+`
+
+const ErrorContainer = styled.div`
+  color: ${({theme}) => theme.palette.error};
+  margin: 10px 0;
 `
 
 export default LoginForm

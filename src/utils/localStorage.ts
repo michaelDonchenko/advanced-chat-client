@@ -6,6 +6,10 @@ export const getLocalStorage = (key: string) => {
   return JSON.parse(itemFromLocalStorage)
 }
 
-export const setLocalStorage = (key: string, value: object) => {
+export const setLocalStorage = (key: string, value: any) => {
+  if (typeof value === 'undefined') {
+    return localStorage.setItem(key, JSON.stringify(''))
+  }
+
   localStorage.setItem(key, JSON.stringify(value))
 }
