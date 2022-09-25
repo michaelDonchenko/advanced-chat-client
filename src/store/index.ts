@@ -1,9 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit'
 import authSlice from './reducers/authSlice'
+import modalSlice from './reducers/modalSlice'
 import socketSlice from './reducers/socketSlice'
 
 export const store = configureStore({
-  reducer: {auth: authSlice, socket: socketSlice},
+  reducer: {auth: authSlice, socket: socketSlice, modal: modalSlice},
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

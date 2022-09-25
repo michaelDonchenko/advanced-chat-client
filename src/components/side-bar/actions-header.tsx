@@ -1,25 +1,37 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useState, useMemo} from 'react'
 import styled from 'styled-components'
 import {RiMenu3Fill} from 'react-icons/ri'
 import {BiSearch} from 'react-icons/bi'
 import Dropdown from '@/components/dropdown'
-
-const menuItems = [
-  {
-    label: 'Add Contact',
-    onClick: () => {},
-  },
-  {
-    label: 'Logout',
-    onClick: () => {},
-  },
-]
+import {useAppDispatch} from '@/store/hooks'
+import {onModalOpen} from '@/store/reducers/modalSlice'
+import {logout} from '@/store/reducers/authSlice'
 
 const ActionsHeader: React.FC = () => {
-  const [isMenuVisible, setIsMenuVisibale] = useState(false)
+  const [isMenuVisible, setIsMenuVisible] = useState(false)
+  const dispatch = useAppDispatch()
+
   const toggleMenu = useCallback(() => {
-    setIsMenuVisibale((prev) => !prev)
+    setIsMenuVisible((prev) => !prev)
   }, [])
+
+  const menuItems = useMemo(
+    () => [
+      {
+        label: 'Add Contact',
+        onClick: () => {
+          dispatch(onModalOpen(null))
+        },
+      },
+      {
+        label: 'Logout',
+        onClick: () => {
+          dispatch(logout())
+        },
+      },
+    ],
+    []
+  )
 
   return (
     <Container>
@@ -31,7 +43,7 @@ const ActionsHeader: React.FC = () => {
 
       <SearchContainer>
         <SearchIcon size={16} />
-        <SearchBar placeholder="Search for chats" />
+        <SearchBar placeholder='Search for chats' />
       </SearchContainer>
     </Container>
   )

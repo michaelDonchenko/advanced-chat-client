@@ -1,6 +1,6 @@
-import {createGlobalStyle} from 'styled-components'
+import {createGlobalStyle, css} from 'styled-components'
 
-const styles = createGlobalStyle`
+const styles = createGlobalStyle<{isModalOpen: boolean}>`
   * {
     margin: 0;
     padding: 0;
@@ -17,6 +17,9 @@ const styles = createGlobalStyle`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    filter: ${(props) => (props.isModalOpen ? 'opacity(0.9)' : 'opacity(1)')};
+    filter:${(props) => (props.isModalOpen ? 'blur(2px)' : 'blur(0)')};
+    transition: all 0.4s;
   }
 
   h1 {

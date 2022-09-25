@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import styled from 'styled-components'
 import {IoSendSharp} from 'react-icons/io5'
 
@@ -6,25 +6,39 @@ import MessageInput from '@/components/inputs/message-input'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import useSocket from '@/hooks/useSocket'
+import Modal from '@/components/modals'
+import {useSelector} from 'react-redux'
+import {RootState} from '@/store'
+import {useAppDispatch} from '@/store/hooks'
+import {onModalClose as onModalCloseDispatch} from '@/store/reducers/modalSlice'
+import AddContactModal from '@/components/modals/add-contact-modal'
 
 const App: React.FC = () => {
   const socket = useSocket()
+  const isModalOpen = useSelector((state: RootState) => state.modal.isModalOpen)
+  const dispatch = useAppDispatch()
+  const onModalClose = useCallback(() => {
+    dispatch(onModalCloseDispatch(null))
+  }, [])
 
   return (
-    <Container>
-      <SidebarWrapper>
-        <SideBar />
-      </SidebarWrapper>
+    <>
+      <Container>
+        <SidebarWrapper>
+          <SideBar />
+        </SidebarWrapper>
 
-      <MessagesWrapper>
-        <Messages />
+        <MessagesWrapper>
+          <Messages />
 
-        <InputContainer>
-          <MessageInput />
-          <StyledIcon />
-        </InputContainer>
-      </MessagesWrapper>
-    </Container>
+          <InputContainer>
+            <MessageInput />
+            <StyledIcon />
+          </InputContainer>
+        </MessagesWrapper>
+      </Container>
+      {isModalOpen && <Modal onModalClose={onModalClose} Content={<AddContactModal />} />}
+    </>
   )
 }
 
