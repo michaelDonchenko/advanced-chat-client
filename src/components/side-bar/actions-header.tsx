@@ -1,19 +1,37 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import {RiMenu3Fill} from 'react-icons/ri'
 import {BiSearch} from 'react-icons/bi'
+import Dropdown from '@/components/dropdown'
+
+const menuItems = [
+  {
+    label: 'Add Contact',
+    onClick: () => {},
+  },
+  {
+    label: 'Logout',
+    onClick: () => {},
+  },
+]
 
 const ActionsHeader: React.FC = () => {
+  const [isMenuVisible, setIsMenuVisibale] = useState(false)
+  const toggleMenu = useCallback(() => {
+    setIsMenuVisibale((prev) => !prev)
+  }, [])
+
   return (
     <Container>
       <Heading>
         <h2>Chats</h2>
-        <MenuIcon size={22} />
+        <MenuIcon onClick={toggleMenu} size={22} />
+        {isMenuVisible && <Dropdown menuItems={menuItems} isOpen={isMenuVisible} />}
       </Heading>
 
       <SearchContainer>
         <SearchIcon size={16} />
-        <SearchBar placeholder='Search for chats' />
+        <SearchBar placeholder="Search for chats" />
       </SearchContainer>
     </Container>
   )
@@ -30,6 +48,7 @@ const Heading = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
+  position: relative;
 `
 
 const MenuIcon = styled(RiMenu3Fill)`
