@@ -1,15 +1,14 @@
+import {Chat} from '@/interfaces/chat-interfaces'
 import React from 'react'
 import styled from 'styled-components'
 import Contact from './contact'
 
-const Contacts: React.FC = () => {
+const Contacts: React.FC<{contacts: Chat[]}> = ({contacts}) => {
   return (
     <Container>
-      <Contact />
-      <Contact />
-      <Contact />
-      <Contact />
-      <Contact />
+      {contacts.map((contact) => (
+        <Contact key={contact.id} />
+      ))}
     </Container>
   )
 }
