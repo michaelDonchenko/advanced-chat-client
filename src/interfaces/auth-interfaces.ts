@@ -1,24 +1,17 @@
 export interface User {
   id: number
   username: string
-  email: string
 }
 
-export interface LoginCredentials {
+export interface AuthCredentials {
   username: string
   password: string
 }
 
-export interface RegisterCredentials extends LoginCredentials {
-  email: string
-}
-
-export interface LoginResponse {
+export interface AuthResponse {
   user: User
   jwt: string
 }
-
-export interface RegisterResponse extends LoginResponse {}
 
 export interface logoutResponse {
   message: string

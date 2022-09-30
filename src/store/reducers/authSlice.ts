@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
-import {LoginResponse, RegisterResponse, User} from '@/interfaces/auth-interfaces'
+import {AuthResponse, User} from '@/interfaces/auth-interfaces'
 import {getLocalStorage} from '@/utils/localStorage'
 
 export interface AuthSlice {
@@ -19,12 +19,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    register: (state, action: PayloadAction<RegisterResponse>) => {
+    register: (state, action: PayloadAction<AuthResponse>) => {
       state.user = action.payload.user
       state.jwt = action.payload.jwt
       state.isAuthenticated = true
     },
-    login: (state, action: PayloadAction<LoginResponse>) => {
+    login: (state, action: PayloadAction<AuthResponse>) => {
       state.user = action.payload.user
       state.jwt = action.payload.jwt
       state.isAuthenticated = true
