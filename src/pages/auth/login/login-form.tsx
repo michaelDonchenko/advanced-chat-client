@@ -42,10 +42,10 @@ const LoginForm = () => {
       const {data} = await login(values)
 
       if (data) {
-        dispatch(loginDispatch(data))
         setLocalStorage('user', data.user)
         setLocalStorage('jwt', data.jwt)
         setLocalStorage('isAuthenticated', true)
+        dispatch(loginDispatch(data))
       }
     } catch (error) {
       setError(errorHandler(error))

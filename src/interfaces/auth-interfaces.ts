@@ -1,7 +1,4 @@
-export interface User {
-  id: number
-  username: string
-}
+import {User} from './user-interfaces'
 
 export interface AuthCredentials {
   username: string

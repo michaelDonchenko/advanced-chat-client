@@ -26,6 +26,7 @@ const ActionsHeader: React.FC = () => {
       {
         label: 'Logout',
         onClick: () => {
+          window.localStorage.clear()
           dispatch(logout())
         },
       },

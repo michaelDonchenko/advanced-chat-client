@@ -5,6 +5,9 @@ import TextInput from '../inputs/text-input'
 import {Formik, Form} from 'formik'
 import * as Yup from 'yup'
 import errorHandler from '@/utils/error-handler'
+import {createContact} from '@/api/user-api'
+import {useAppDispatch} from '@/store/hooks'
+import {onModalClose} from '@/store/reducers/modalSlice'
 
 const initialValues = {
   username: '',
@@ -20,10 +23,16 @@ const ContactSchema = Yup.object().shape({
 const AddContactModal: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const dispatch = useAppDispatch()
 
   const onSubmit = useCallback(async (values: {username: string}) => {
     try {
-      console.log(values)
+      const {data} = await createContact(values.username)
+
+      if (data.message) {
+      }
+
+      dispatch(onModalClose(null))
     } catch (error) {
       setError(errorHandler(error))
     } finally {

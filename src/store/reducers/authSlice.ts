@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
-import {AuthResponse, User} from '@/interfaces/auth-interfaces'
+import {AuthResponse} from '@/interfaces/auth-interfaces'
 import {getLocalStorage} from '@/utils/localStorage'
+import {User} from '@/interfaces/user-interfaces'
 
 export interface AuthSlice {
   user: User | null
@@ -33,8 +34,6 @@ const authSlice = createSlice({
       state.user = null
       state.jwt = null
       state.isAuthenticated = false
-
-      window.localStorage.clear()
     },
   },
   extraReducers: {},

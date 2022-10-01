@@ -1,13 +1,21 @@
-import {Chat} from '@/interfaces/chat-interfaces'
-import React from 'react'
+import {useAppDispatch, useAppSelector} from '@/store/hooks'
+import {fetchContacts} from '@/store/reducers/contactsSlice'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
-import Contact from './contact'
+import ContactComponent from './contact'
 
-const Contacts: React.FC<{contacts: Chat[]}> = ({contacts}) => {
+const Contacts: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const contacts = useAppSelector((state) => state.contacts.contacts)
+
+  useEffect(() => {
+    dispatch(fetchContacts())
+  }, [])
+
   return (
     <Container>
-      {contacts.map((contact) => (
-        <Contact key={contact.id} />
+      {contacts?.map((contact) => (
+        <ContactComponent key={contact.id} contact={contact} />
       ))}
     </Container>
   )

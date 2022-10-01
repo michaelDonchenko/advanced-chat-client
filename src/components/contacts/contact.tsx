@@ -1,12 +1,13 @@
-import React from 'react'
+import {Contact} from '@/interfaces/user-interfaces'
 import styled from 'styled-components'
 
-const Contact = () => {
+const ContactComponent: React.FC<{contact: Contact}> = (props) => {
+  const {photo, username} = props.contact
   return (
     <Container>
-      <Avatar alt='Avatar image' src='https://www.w3schools.com/howto/img_avatar.png' />
+      <Avatar alt='Avatar image' src={photo} />
       <NameSection>
-        <p>User name</p>
+        <p>{username}</p>
         <LastMessage>Last message</LastMessage>
       </NameSection>
 
@@ -60,4 +61,4 @@ const UnreadMessages = styled.div`
   background-color: ${({theme}) => theme.palette.primary.dark};
 `
 
-export default Contact
+export default ContactComponent
