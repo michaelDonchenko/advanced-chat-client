@@ -6,6 +6,7 @@ import Dropdown from '@/components/dropdown'
 import {useAppDispatch} from '@/store/hooks'
 import {onModalOpen} from '@/store/reducers/modalSlice'
 import {logout} from '@/store/reducers/authSlice'
+import {resetChosenConversation} from '@/store/reducers/conversationSlice'
 
 const ActionsHeader: React.FC = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
@@ -15,24 +16,22 @@ const ActionsHeader: React.FC = () => {
     setIsMenuVisible((prev) => !prev)
   }, [])
 
-  const menuItems = useMemo(
-    () => [
-      {
-        label: 'Add Contact',
-        onClick: () => {
-          dispatch(onModalOpen(null))
-        },
+  const menuItems = [
+    {
+      label: 'Add Contact',
+      onClick: () => {
+        dispatch(onModalOpen(null))
       },
-      {
-        label: 'Logout',
-        onClick: () => {
-          window.localStorage.clear()
-          dispatch(logout())
-        },
+    },
+    {
+      label: 'Logout',
+      onClick: () => {
+        window.localStorage.clear()
+        dispatch(logout())
+        dispatch(resetChosenConversation())
       },
-    ],
-    []
-  )
+    },
+  ]
 
   return (
     <Container>

@@ -19,7 +19,7 @@ const styles = createGlobalStyle<{isModalOpen: boolean}>`
     justify-content: center;
     filter: ${(props) => (props.isModalOpen ? 'opacity(0.9)' : 'opacity(1)')};
     filter:${(props) => (props.isModalOpen ? 'blur(2px)' : 'blur(0)')};
-    transition: all 0.4s;
+    transition: filter 0.5s;
   }
 
   h1 {

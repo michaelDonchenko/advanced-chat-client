@@ -12,7 +12,7 @@ interface MenuItem {
   onClick: () => any
 }
 
-const Dropdown: React.FC<DropDownProps> = ({menuItems, isOpen}) => {
+const Dropdown: React.FC<DropDownProps> = ({menuItems}) => {
   return (
     <Container>
       {menuItems.map((item) => (

@@ -1,22 +1,15 @@
-import React, {useMemo} from 'react'
+import {Message as MessageI, User} from '@/interfaces/user-interfaces'
+import {useAppSelector} from '@/store/hooks'
 import styled from 'styled-components'
 
-interface MessageProps {
-  message: {
-    sender: string
-    createdAt: string
-    text: string
-  }
-}
-
-const Message: React.FC<MessageProps> = ({message}) => {
-  const myId = '1'
-  const isMyMessage = useMemo<boolean>(() => myId === message.sender, [myId, message])
+const Message = ({message}: {message: MessageI}) => {
+  const {id} = useAppSelector((state) => state.auth.user as User)
+  const isMyMessage = id === message.from
 
   return (
     <StyledMessage isMyMessage={isMyMessage}>
       <p>{message.text}</p>
-      <CreatedAt>{message.createdAt}</CreatedAt>
+      <CreatedAt>{message.createdAt.toString()}</CreatedAt>
     </StyledMessage>
   )
 }

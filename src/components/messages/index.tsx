@@ -1,38 +1,26 @@
+import {useAppDispatch, useAppSelector} from '@/store/hooks'
+import {fetchConversation, resetConversation} from '@/store/reducers/conversationSlice'
+import {useEffect} from 'react'
 import styled from 'styled-components'
 import Message from './message'
 
 const Messages = () => {
-  const message = {
-    sender: '2',
-    createdAt: '18:12',
-    text: 'test text',
-  }
-  const message2 = {
-    sender: '1',
-    createdAt: '18:12',
-    text: 'test text sdads saadsad sadsad sadas dsa',
-  }
+  const {conversation, chosenConversationId} = useAppSelector((state) => state.conversation)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chosenConversationId) {
+      dispatch(fetchConversation(chosenConversationId))
+      return
+    }
+    dispatch(resetConversation())
+  }, [chosenConversationId])
+
   return (
     <Container>
-      <Message message={message2} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message2} />
-      <Message message={message2} />
-      <Message message={message2} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message} />
-      <Message message={message2} />
-      <Message message={message} />
-      <Message message={message2} />
+      {conversation?.messages?.map((message) => (
+        <Message message={message} key={message.id} />
+      ))}
     </Container>
   )
 }
@@ -42,6 +30,9 @@ const Container = styled.div`
   max-height: 100%;
   overflow-y: auto;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 
   &::-webkit-scrollbar {
     width: 10px;

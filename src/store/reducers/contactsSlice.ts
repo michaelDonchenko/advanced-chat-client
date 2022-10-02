@@ -22,8 +22,8 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState: initialState,
   reducers: {
-    setContacts: (state, action: PayloadAction<{contacts: Contact[]}>) => {
-      state.contacts = action.payload.contacts
+    addContact: (state, action: PayloadAction<{contact: Contact}>) => {
+      state.contacts.unshift(action.payload.contact)
     },
   },
   extraReducers(builder) {
@@ -44,6 +44,6 @@ const contactsSlice = createSlice({
   },
 })
 
-export const {setContacts} = contactsSlice.actions
+export const {addContact} = contactsSlice.actions
 
 export default contactsSlice.reducer

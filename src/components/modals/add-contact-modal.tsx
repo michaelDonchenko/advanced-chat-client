@@ -8,6 +8,7 @@ import errorHandler from '@/utils/error-handler'
 import {createContact} from '@/api/user-api'
 import {useAppDispatch} from '@/store/hooks'
 import {onModalClose} from '@/store/reducers/modalSlice'
+import {addContact} from '@/store/reducers/contactsSlice'
 
 const initialValues = {
   username: '',
@@ -29,9 +30,7 @@ const AddContactModal: React.FC = () => {
     try {
       const {data} = await createContact(values.username)
 
-      if (data.message) {
-      }
-
+      dispatch(addContact({contact: data.contact}))
       dispatch(onModalClose(null))
     } catch (error) {
       setError(errorHandler(error))

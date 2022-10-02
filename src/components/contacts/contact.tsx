@@ -1,12 +1,21 @@
 import {Contact} from '@/interfaces/user-interfaces'
+import {useAppDispatch} from '@/store/hooks'
+import {chooseConversation} from '@/store/reducers/conversationSlice'
+import {useCallback} from 'react'
 import styled from 'styled-components'
 
 const ContactComponent: React.FC<{contact: Contact}> = (props) => {
-  const {photo, username} = props.contact
+  const {photo, username, conversationId} = props.contact
+  const dispatch = useAppDispatch()
+
+  const onClick = useCallback(() => {
+    dispatch(chooseConversation(conversationId))
+  }, [conversationId])
+
   return (
     <Container>
-      <Avatar alt='Avatar image' src={photo} />
-      <NameSection>
+      <Avatar onClick={onClick} alt='Avatar image' src={photo} />
+      <NameSection onClick={onClick}>
         <p>{username}</p>
         <LastMessage>Last message</LastMessage>
       </NameSection>
@@ -34,6 +43,7 @@ const Avatar = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  cursor: pointer;
 `
 
 const NameSection = styled.div`
@@ -42,6 +52,7 @@ const NameSection = styled.div`
   justify-content: center;
   padding: 2px 8px;
   flex: 1;
+  cursor: pointer;
 `
 const InfoSection = styled.div`
   display: flex;
