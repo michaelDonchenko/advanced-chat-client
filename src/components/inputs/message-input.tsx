@@ -1,8 +1,13 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import styled from 'styled-components'
 
-const MessageInput: React.FC = () => {
-  return <Input placeholder='Write a message...' />
+interface MessageInputProps {
+  onSubmit: (event: React.KeyboardEvent<HTMLInputElement>, ref: React.MutableRefObject<null | HTMLInputElement>) => void
+}
+
+const MessageInput: React.FC<MessageInputProps> = ({onSubmit}) => {
+  const ref = useRef(null)
+  return <Input onKeyDown={(event) => onSubmit(event, ref)} ref={ref} placeholder='Write a message...' />
 }
 
 const Input = styled.input`

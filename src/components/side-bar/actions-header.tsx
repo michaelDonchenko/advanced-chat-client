@@ -3,14 +3,18 @@ import styled from 'styled-components'
 import {RiMenu3Fill} from 'react-icons/ri'
 import {BiSearch} from 'react-icons/bi'
 import Dropdown from '@/components/dropdown'
-import {useAppDispatch} from '@/store/hooks'
+import {useAppDispatch, useAppSelector} from '@/store/hooks'
 import {onModalOpen} from '@/store/reducers/modalSlice'
 import {logout} from '@/store/reducers/authSlice'
 import {resetChosenConversation} from '@/store/reducers/conversationSlice'
+import useSocket from '@/hooks/useSocket'
+import {User} from '@/interfaces/user-interfaces'
 
 const ActionsHeader: React.FC = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const dispatch = useAppDispatch()
+  const socket = useSocket()
+  const user = useAppSelector((state) => state.auth.user as User)
 
   const toggleMenu = useCallback(() => {
     setIsMenuVisible((prev) => !prev)
@@ -26,6 +30,7 @@ const ActionsHeader: React.FC = () => {
     {
       label: 'Logout',
       onClick: () => {
+        socket.emit('logout', user.id)
         window.localStorage.clear()
         dispatch(logout())
         dispatch(resetChosenConversation())
@@ -36,7 +41,7 @@ const ActionsHeader: React.FC = () => {
   return (
     <Container>
       <Heading>
-        <h2>Chats</h2>
+        <h2>Contacts</h2>
         <MenuIcon onClick={toggleMenu} size={22} />
         {isMenuVisible && <Dropdown menuItems={menuItems} isOpen={isMenuVisible} />}
       </Heading>

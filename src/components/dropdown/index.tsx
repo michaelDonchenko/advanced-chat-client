@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import {motion, Variant} from 'framer-motion'
 
 interface DropDownProps {
   menuItems: MenuItem[]
@@ -24,7 +23,7 @@ const Dropdown: React.FC<DropDownProps> = ({menuItems}) => {
   )
 }
 
-const Container = styled(motion.div)`
+const Container = styled.div`
   width: 180px;
   background-color: ${({theme}) => theme.palette.background.dark};
   position: absolute;

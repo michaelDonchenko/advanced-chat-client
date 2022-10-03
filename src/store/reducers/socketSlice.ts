@@ -1,3 +1,4 @@
+import {getLocalStorage} from '@/utils/localStorage'
 import {createSlice} from '@reduxjs/toolkit'
 import {io, Socket} from 'socket.io-client'
 
@@ -6,7 +7,7 @@ export interface SocketSlice {
 }
 
 const initialState: SocketSlice = {
-  socketIo: io('http://localhost:8000', {withCredentials: true}),
+  socketIo: io('http://localhost:8000', {withCredentials: true, query: {userId: getLocalStorage('user')?.id}}),
 }
 
 const socketSlice = createSlice({

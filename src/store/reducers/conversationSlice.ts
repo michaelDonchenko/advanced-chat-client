@@ -36,6 +36,9 @@ const conversationSlice = createSlice({
     resetConversation: (state) => {
       state.conversation = null
     },
+    pushMessage: (state, action) => {
+      state.conversation?.messages.push(action.payload)
+    },
   },
   extraReducers(builder) {
     builder
@@ -55,6 +58,6 @@ const conversationSlice = createSlice({
   },
 })
 
-export const {chooseConversation, resetChosenConversation, resetConversation} = conversationSlice.actions
+export const {chooseConversation, resetChosenConversation, resetConversation, pushMessage} = conversationSlice.actions
 
 export default conversationSlice.reducer

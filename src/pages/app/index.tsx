@@ -1,25 +1,45 @@
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
 import {IoSendSharp} from 'react-icons/io5'
-
 import MessageInput from '@/components/inputs/message-input'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
-import useSocket from '@/hooks/useSocket'
 import Modal from '@/components/modals'
-import {useSelector} from 'react-redux'
-import {RootState} from '@/store'
-import {useAppDispatch} from '@/store/hooks'
+import {useAppDispatch, useAppSelector} from '@/store/hooks'
 import {onModalClose as onModalCloseDispatch} from '@/store/reducers/modalSlice'
 import AddContactModal from '@/components/modals/add-contact-modal'
+import useSocket from '@/hooks/useSocket'
+import {User} from '@/interfaces/user-interfaces'
 
 const App: React.FC = () => {
-  const socket = useSocket()
-  const isModalOpen = useSelector((state: RootState) => state.modal.isModalOpen)
+  const isModalOpen = useAppSelector((state) => state.modal.isModalOpen)
   const dispatch = useAppDispatch()
   const onModalClose = useCallback(() => {
     dispatch(onModalCloseDispatch(null))
   }, [])
+  const socket = useSocket()
+  const {id} = useAppSelector((state) => state.auth.user as User)
+  const {chosenConversationId, conversation} = useAppSelector((state) => state.conversation)
+
+  const onNewMessage = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>, ref: React.MutableRefObject<null | HTMLInputElement>) => {
+      if (ref.current?.value && event.key === 'Enter') {
+        if (!chosenConversationId) {
+          return
+        }
+
+        const newMessage = {
+          text: ref.current.value,
+          from: id,
+          conversationId: chosenConversationId,
+        }
+
+        socket.emit('message', {message: newMessage, conversation, myUserId: id})
+        ref.current.value = ''
+      }
+    },
+    [chosenConversationId, id, socket, conversation]
+  )
 
   return (
     <>
@@ -29,12 +49,14 @@ const App: React.FC = () => {
         </SidebarWrapper>
 
         <MessagesWrapper>
-          <Messages />
+          {chosenConversationId ? <Messages /> : <StyledH2>Please choose or create contact</StyledH2>}
 
-          <InputContainer>
-            <MessageInput />
-            <StyledIcon />
-          </InputContainer>
+          {chosenConversationId && (
+            <InputContainer>
+              <MessageInput onSubmit={onNewMessage} />
+              <StyledIcon />
+            </InputContainer>
+          )}
         </MessagesWrapper>
       </Container>
       {isModalOpen && <Modal onModalClose={onModalClose} Content={<AddContactModal />} />}
@@ -80,6 +102,11 @@ const StyledIcon = styled(IoSendSharp)`
   height: 30px;
   margin: 0 10px;
   cursor: pointer;
+`
+
+const StyledH2 = styled.h2`
+  text-align: center;
+  margin-top: 16px;
 `
 
 export default App

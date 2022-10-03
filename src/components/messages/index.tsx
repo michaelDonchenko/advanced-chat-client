@@ -1,12 +1,18 @@
+import useOnScreen from '@/hooks/useOnScreen'
+import useSocket from '@/hooks/useSocket'
+import {Message as MessageI} from '@/interfaces/user-interfaces'
 import {useAppDispatch, useAppSelector} from '@/store/hooks'
-import {fetchConversation, resetConversation} from '@/store/reducers/conversationSlice'
-import {useEffect} from 'react'
+import {fetchConversation, pushMessage, resetConversation} from '@/store/reducers/conversationSlice'
+import {useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Message from './message'
 
 const Messages = () => {
   const {conversation, chosenConversationId} = useAppSelector((state) => state.conversation)
   const dispatch = useAppDispatch()
+  const socket = useSocket()
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const isVisible = useOnScreen(bottomRef)
 
   useEffect(() => {
     if (chosenConversationId) {
@@ -16,11 +22,28 @@ const Messages = () => {
     dispatch(resetConversation())
   }, [chosenConversationId])
 
+  useEffect(() => {
+    socket.on('newMessage', (message: MessageI) => {
+      if (message.conversationId === chosenConversationId) {
+        dispatch(pushMessage(message))
+      }
+    })
+
+    socket.on('selfMessage', (message: MessageI) => {
+      dispatch(pushMessage(message))
+    })
+  }, [socket])
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'})
+  }, [isVisible, conversation, chosenConversationId])
+
   return (
     <Container>
       {conversation?.messages?.map((message) => (
         <Message message={message} key={message.id} />
       ))}
+      <div ref={bottomRef}></div>
     </Container>
   )
 }
