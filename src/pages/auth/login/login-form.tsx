@@ -1,9 +1,8 @@
 import {login} from '@/api/auth-api'
 import Button from '@/components/buttons/button'
 import TextInput from '@/components/inputs/text-input'
-import useSocket from '@/hooks/useSocket'
-import {useAppDispatch} from '@/store/hooks'
-import {login as loginDispatch} from '@/store/reducers/authSlice'
+import useAuthContext from '@/context/authContext'
+import useSocketContext from '@/context/socketContext'
 import errorHandler from '@/utils/error-handler'
 import {setLocalStorage} from '@/utils/localStorage'
 import {Formik, Form, FormikHelpers} from 'formik'
@@ -35,8 +34,8 @@ const initialValues: FormValues = {
 const LoginForm = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const dispatch = useAppDispatch()
-  const socket = useSocket()
+  const {socket} = useSocketContext()
+  const authContext = useAuthContext()
 
   const handleSubmit = useCallback(async (values: FormValues, helpers: FormikHelpers<FormValues>) => {
     try {
@@ -47,8 +46,8 @@ const LoginForm = () => {
         setLocalStorage('user', data.user)
         setLocalStorage('jwt', data.jwt)
         setLocalStorage('isAuthenticated', true)
-        dispatch(loginDispatch(data))
 
+        authContext.login(data)
         socket.emit('login', data.user.id)
       }
     } catch (error) {

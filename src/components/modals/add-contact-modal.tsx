@@ -7,8 +7,8 @@ import * as Yup from 'yup'
 import errorHandler from '@/utils/error-handler'
 import {createContact} from '@/api/user-api'
 import {useAppDispatch} from '@/store/hooks'
-import {onModalClose} from '@/store/reducers/modalSlice'
 import {addContact} from '@/store/reducers/contactsSlice'
+import useModalContext from '@/context/modalContext'
 
 const initialValues = {
   username: '',
@@ -22,6 +22,7 @@ const ContactSchema = Yup.object().shape({
 })
 
 const AddContactModal: React.FC = () => {
+  const {closeModal} = useModalContext()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const dispatch = useAppDispatch()
@@ -31,7 +32,7 @@ const AddContactModal: React.FC = () => {
       const {data} = await createContact(values.username)
 
       dispatch(addContact({contact: data.contact}))
-      dispatch(onModalClose(null))
+      closeModal()
     } catch (error) {
       setError(errorHandler(error))
     } finally {
@@ -60,6 +61,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px 0;
+  padding: 16px;
 `
 
 const Title = styled.h2`

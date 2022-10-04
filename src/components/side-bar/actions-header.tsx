@@ -1,20 +1,22 @@
-import React, {useCallback, useState, useMemo} from 'react'
+import React, {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import {RiMenu3Fill} from 'react-icons/ri'
 import {BiSearch} from 'react-icons/bi'
 import Dropdown from '@/components/dropdown'
-import {useAppDispatch, useAppSelector} from '@/store/hooks'
-import {onModalOpen} from '@/store/reducers/modalSlice'
-import {logout} from '@/store/reducers/authSlice'
+import {useAppDispatch} from '@/store/hooks'
 import {resetChosenConversation} from '@/store/reducers/conversationSlice'
-import useSocket from '@/hooks/useSocket'
-import {User} from '@/interfaces/user-interfaces'
+import useAuthContext from '@/context/authContext'
+import useSocketContext from '@/context/socketContext'
+import useModalContext from '@/context/modalContext'
 
 const ActionsHeader: React.FC = () => {
+  const {user} = useAuthContext()
+  const {socket} = useSocketContext()
+  const {openModal} = useModalContext()
+
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const dispatch = useAppDispatch()
-  const socket = useSocket()
-  const user = useAppSelector((state) => state.auth.user as User)
+  const authContext = useAuthContext()
 
   const toggleMenu = useCallback(() => {
     setIsMenuVisible((prev) => !prev)
@@ -23,16 +25,14 @@ const ActionsHeader: React.FC = () => {
   const menuItems = [
     {
       label: 'Add Contact',
-      onClick: () => {
-        dispatch(onModalOpen(null))
-      },
+      onClick: () => openModal(),
     },
     {
       label: 'Logout',
       onClick: () => {
-        socket.emit('logout', user.id)
+        socket.emit('logout', user?.id)
         window.localStorage.clear()
-        dispatch(logout())
+        authContext.logout()
         dispatch(resetChosenConversation())
       },
     },

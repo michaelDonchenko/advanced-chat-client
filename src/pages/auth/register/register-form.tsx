@@ -6,11 +6,10 @@ import {Formik, Form, FormikHelpers} from 'formik'
 import {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
-import {useAppDispatch} from '@/store/hooks'
-import {register as registerDispatch} from '@/store/reducers/authSlice'
 import {setLocalStorage} from '@/utils/localStorage'
 import errorHandler from '@/utils/error-handler'
-import useSocket from '@/hooks/useSocket'
+import useAuthContext from '@/context/authContext'
+import useSocketContext from '@/context/socketContext'
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -29,10 +28,10 @@ const initialValues: AuthCredentials = {
 }
 
 const RegisterForm = () => {
+  const authContext = useAuthContext()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const dispatch = useAppDispatch()
-  const socket = useSocket()
+  const {socket} = useSocketContext()
 
   const handleSubmit = useCallback(async (values: AuthCredentials, helpers: FormikHelpers<AuthCredentials>) => {
     try {
@@ -40,10 +39,10 @@ const RegisterForm = () => {
       const {data} = await register(values)
 
       if (data) {
-        dispatch(registerDispatch(data))
         setLocalStorage('user', data.user)
         setLocalStorage('jwt', data.jwt)
         setLocalStorage('isAuthenticated', true)
+        authContext.login(data)
 
         socket.emit('login', data.user.id)
       }

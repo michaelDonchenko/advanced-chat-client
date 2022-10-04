@@ -5,20 +5,18 @@ import MessageInput from '@/components/inputs/message-input'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import Modal from '@/components/modals'
-import {useAppDispatch, useAppSelector} from '@/store/hooks'
-import {onModalClose as onModalCloseDispatch} from '@/store/reducers/modalSlice'
+import {useAppSelector} from '@/store/hooks'
 import AddContactModal from '@/components/modals/add-contact-modal'
-import useSocket from '@/hooks/useSocket'
-import {User} from '@/interfaces/user-interfaces'
+import useAuthContext from '@/context/authContext'
+import useSocketContext from '@/context/socketContext'
+import useModalContext from '@/context/modalContext'
 
 const App: React.FC = () => {
-  const isModalOpen = useAppSelector((state) => state.modal.isModalOpen)
-  const dispatch = useAppDispatch()
-  const onModalClose = useCallback(() => {
-    dispatch(onModalCloseDispatch(null))
-  }, [])
-  const socket = useSocket()
-  const {id} = useAppSelector((state) => state.auth.user as User)
+  const {user} = useAuthContext()
+  const {socket} = useSocketContext()
+  const {isModalOpen, closeModal} = useModalContext()
+
+  const onModalClose = useCallback(() => closeModal(), [])
   const {chosenConversationId, conversation} = useAppSelector((state) => state.conversation)
 
   const onNewMessage = useCallback(
@@ -30,15 +28,15 @@ const App: React.FC = () => {
 
         const newMessage = {
           text: ref.current.value,
-          from: id,
+          from: user?.id,
           conversationId: chosenConversationId,
         }
 
-        socket.emit('message', {message: newMessage, conversation, myUserId: id})
+        socket.emit('message', {message: newMessage, conversation, myUserId: user?.id})
         ref.current.value = ''
       }
     },
-    [chosenConversationId, id, socket, conversation]
+    [chosenConversationId, user?.id, conversation]
   )
 
   return (

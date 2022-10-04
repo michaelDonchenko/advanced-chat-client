@@ -1,11 +1,9 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Contacts from '../contacts'
 import ActionsHeader from './actions-header'
 
 const SideBar: React.FC = () => {
-  useEffect(() => {}, [])
-
   return (
     <Container>
       <ActionsHeader />

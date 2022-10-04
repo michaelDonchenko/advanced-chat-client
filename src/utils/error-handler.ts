@@ -4,7 +4,7 @@ const errorHandler = (error: unknown): string => {
   let message = ''
 
   if (axios.isAxiosError(error) && error.response) {
-    const errorMessage = error.response.data.message as string
+    const errorMessage = error.response.data.message
 
     return (message = errorMessage ? errorMessage : 'Unknown error from BE')
   }

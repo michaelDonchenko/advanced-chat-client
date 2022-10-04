@@ -1,15 +1,22 @@
+import useSocketContext from '@/context/socketContext'
+import {Contact} from '@/interfaces/user-interfaces'
 import {useAppDispatch, useAppSelector} from '@/store/hooks'
-import {fetchContacts} from '@/store/reducers/contactsSlice'
+import {addContact, fetchContacts} from '@/store/reducers/contactsSlice'
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import ContactComponent from './contact'
 
 const Contacts: React.FC = () => {
-  const dispatch = useAppDispatch()
   const contacts = useAppSelector((state) => state.contacts.contacts)
+  const dispatch = useAppDispatch()
+  const {socket} = useSocketContext()
 
   useEffect(() => {
     dispatch(fetchContacts())
+  }, [])
+
+  useEffect(() => {
+    socket.on('newContact', (contact: Contact) => dispatch(addContact({contact})))
   }, [])
 
   return (

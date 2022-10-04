@@ -1,10 +1,10 @@
-import {Message as MessageI, User} from '@/interfaces/user-interfaces'
-import {useAppSelector} from '@/store/hooks'
+import useAuthContext from '@/context/authContext'
+import {Message as MessageI} from '@/interfaces/user-interfaces'
 import styled from 'styled-components'
 
 const Message = ({message}: {message: MessageI}) => {
-  const {id} = useAppSelector((state) => state.auth.user as User)
-  const isMyMessage = id === message.from
+  const {user} = useAuthContext()
+  const isMyMessage = user?.id === message.from
 
   return (
     <StyledMessage isMyMessage={isMyMessage}>

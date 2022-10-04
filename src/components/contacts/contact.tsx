@@ -1,7 +1,7 @@
 import {Contact} from '@/interfaces/user-interfaces'
 import {useAppDispatch} from '@/store/hooks'
 import {chooseConversation} from '@/store/reducers/conversationSlice'
-import {useCallback} from 'react'
+import React, {useCallback} from 'react'
 import styled from 'styled-components'
 
 const ContactComponent: React.FC<{contact: Contact}> = (props) => {
@@ -10,7 +10,7 @@ const ContactComponent: React.FC<{contact: Contact}> = (props) => {
 
   const onClick = useCallback(() => {
     dispatch(chooseConversation(conversationId))
-  }, [conversationId])
+  }, [props.contact])
 
   return (
     <Container>
