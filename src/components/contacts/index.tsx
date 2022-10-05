@@ -8,13 +8,13 @@ import styled from 'styled-components'
 import ContactComponent from './contact'
 
 const Contacts: React.FC = () => {
-  const {data, isLoading, isSuccess} = useQuery(['contacts'], getContacts)
+  const {isLoading} = useQuery(['contacts'], getContacts, {
+    onSuccess: (data) => {
+      setContacts(data.contacts)
+    },
+  })
   const {contacts, setContacts, addContact} = useContactsContext()
   const {socket} = useSocketContext()
-
-  if (isSuccess) {
-    setContacts(data.contacts)
-  }
 
   useEffect(() => {
     socket.on('newContact', (contact: Contact) => addContact(contact))

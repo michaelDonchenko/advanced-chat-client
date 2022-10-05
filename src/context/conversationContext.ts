@@ -1,4 +1,4 @@
-import {Conversation} from '@/interfaces/user-interfaces'
+import {Conversation, Message} from '@/interfaces/user-interfaces'
 import create from 'zustand'
 import {devtools} from 'zustand/middleware'
 import {immer} from 'zustand/middleware/immer'
@@ -8,6 +8,8 @@ interface ConversationContext {
   conversation: Conversation | null
   setActiveConversationId: (id: number) => void
   setConversation: (conversation: Conversation) => void
+  resetConversationState: () => void
+  addMessage: (message: Message) => void
 }
 
 const useConversationContext = create<ConversationContext>()(
@@ -32,6 +34,17 @@ const useConversationContext = create<ConversationContext>()(
           false,
           {type: 'conversation/setConversation'}
         )
+      },
+      resetConversationState: () => {
+        set((state) => {
+          state.conversation = null
+          state.activeConversationId = null
+        })
+      },
+      addMessage: (message) => {
+        set((state) => {
+          state.conversation?.messages.push(message)
+        })
       },
     })),
     {name: 'conversationContext'}

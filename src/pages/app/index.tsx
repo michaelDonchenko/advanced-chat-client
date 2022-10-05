@@ -17,10 +17,13 @@ const App: React.FC = () => {
   const {user} = useAuthContext()
   const {socket} = useSocketContext()
   const {isModalOpen, closeModal} = useModalContext()
-  const {activeConversationId} = useConversationContext()
+  const {activeConversationId, setConversation, conversation} = useConversationContext()
 
-  const {data} = useQuery(['conversation', activeConversationId], () => getConversation(activeConversationId), {
+  const {} = useQuery(['conversation', activeConversationId], () => getConversation(activeConversationId), {
     enabled: typeof activeConversationId === 'number',
+    onSuccess: (data) => {
+      setConversation(data.conversation)
+    },
   })
 
   const onModalClose = useCallback(() => closeModal(), [])
@@ -28,7 +31,7 @@ const App: React.FC = () => {
   const onNewMessage = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>, ref: React.MutableRefObject<null | HTMLInputElement>) => {
       if (ref.current?.value && event.key === 'Enter') {
-        if (!data?.conversation) {
+        if (!conversation) {
           return
         }
 
@@ -38,11 +41,11 @@ const App: React.FC = () => {
           conversationId: activeConversationId,
         }
 
-        socket.emit('message', {message: newMessage, conversation: data.conversation, myUserId: user?.id})
+        socket.emit('message', {message: newMessage, conversation: conversation, myUserId: user?.id})
         ref.current.value = ''
       }
     },
-    [activeConversationId, user?.id, data?.conversation]
+    [activeConversationId, user?.id, conversation]
   )
 
   return (
@@ -55,9 +58,9 @@ const App: React.FC = () => {
         <MessagesWrapper>
           {!activeConversationId && <StyledH2>Please choose or create contact</StyledH2>}
 
-          {data && (
+          {conversation && (
             <>
-              <Messages messages={data.conversation.messages} />
+              <Messages messages={conversation.messages} />
               <InputContainer>
                 <MessageInput onSubmit={onNewMessage} />
                 <StyledIcon />

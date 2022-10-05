@@ -6,11 +6,13 @@ import Dropdown from '@/components/dropdown'
 import useAuthContext from '@/context/authContext'
 import useSocketContext from '@/context/socketContext'
 import useModalContext from '@/context/modalContext'
+import useConversationContext from '@/context/conversationContext'
 
 const ActionsHeader: React.FC = () => {
   const authContext = useAuthContext()
   const {socket} = useSocketContext()
   const {openModal} = useModalContext()
+  const {resetConversationState} = useConversationContext()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
 
   const toggleMenu = useCallback(() => {
@@ -28,6 +30,7 @@ const ActionsHeader: React.FC = () => {
         socket.emit('logout', authContext.user?.id)
         authContext.logout()
         window.localStorage.clear()
+        resetConversationState()
       },
     },
   ]

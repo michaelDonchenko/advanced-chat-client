@@ -1,8 +1,9 @@
+import React from 'react'
 import useAuthContext from '@/context/authContext'
 import {Message as MessageI} from '@/interfaces/user-interfaces'
 import styled from 'styled-components'
 
-const Message = ({message}: {message: MessageI}) => {
+const Message = React.memo(({message}: {message: MessageI}) => {
   const {user} = useAuthContext()
   const isMyMessage = user?.id === message.from
 
@@ -12,7 +13,7 @@ const Message = ({message}: {message: MessageI}) => {
       <CreatedAt>{message.createdAt.toString()}</CreatedAt>
     </StyledMessage>
   )
-}
+})
 
 const StyledMessage = styled.div<{isMyMessage: boolean}>`
   width: fit-content;
