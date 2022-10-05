@@ -3,20 +3,15 @@ import styled from 'styled-components'
 import {RiMenu3Fill} from 'react-icons/ri'
 import {BiSearch} from 'react-icons/bi'
 import Dropdown from '@/components/dropdown'
-import {useAppDispatch} from '@/store/hooks'
-import {resetChosenConversation} from '@/store/reducers/conversationSlice'
 import useAuthContext from '@/context/authContext'
 import useSocketContext from '@/context/socketContext'
 import useModalContext from '@/context/modalContext'
 
 const ActionsHeader: React.FC = () => {
-  const {user} = useAuthContext()
+  const authContext = useAuthContext()
   const {socket} = useSocketContext()
   const {openModal} = useModalContext()
-
   const [isMenuVisible, setIsMenuVisible] = useState(false)
-  const dispatch = useAppDispatch()
-  const authContext = useAuthContext()
 
   const toggleMenu = useCallback(() => {
     setIsMenuVisible((prev) => !prev)
@@ -30,10 +25,9 @@ const ActionsHeader: React.FC = () => {
     {
       label: 'Logout',
       onClick: () => {
-        socket.emit('logout', user?.id)
-        window.localStorage.clear()
+        socket.emit('logout', authContext.user?.id)
         authContext.logout()
-        dispatch(resetChosenConversation())
+        window.localStorage.clear()
       },
     },
   ]

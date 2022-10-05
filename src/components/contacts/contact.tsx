@@ -1,16 +1,13 @@
+import useConversationContext from '@/context/conversationContext'
 import {Contact} from '@/interfaces/user-interfaces'
-import {useAppDispatch} from '@/store/hooks'
-import {chooseConversation} from '@/store/reducers/conversationSlice'
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
 
 const ContactComponent: React.FC<{contact: Contact}> = (props) => {
   const {photo, username, conversationId} = props.contact
-  const dispatch = useAppDispatch()
+  const {setActiveConversationId} = useConversationContext()
 
-  const onClick = useCallback(() => {
-    dispatch(chooseConversation(conversationId))
-  }, [props.contact])
+  const onClick = useCallback(() => setActiveConversationId(conversationId), [conversationId])
 
   return (
     <Container>

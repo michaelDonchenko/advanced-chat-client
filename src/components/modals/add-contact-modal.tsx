@@ -1,14 +1,9 @@
-import React, {useCallback, useState} from 'react'
 import styled from 'styled-components'
 import Button from '../buttons/button'
 import TextInput from '../inputs/text-input'
 import {Formik, Form} from 'formik'
 import * as Yup from 'yup'
-import errorHandler from '@/utils/error-handler'
-import {createContact} from '@/api/user-api'
-import {useAppDispatch} from '@/store/hooks'
-import {addContact} from '@/store/reducers/contactsSlice'
-import useModalContext from '@/context/modalContext'
+import useAddContactMutation from '@/hooks/mutations/useAddContactMutation'
 
 const initialValues = {
   username: '',
@@ -22,33 +17,21 @@ const ContactSchema = Yup.object().shape({
 })
 
 const AddContactModal: React.FC = () => {
-  const {closeModal} = useModalContext()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const dispatch = useAppDispatch()
-
-  const onSubmit = useCallback(async (values: {username: string}) => {
-    try {
-      const {data} = await createContact(values.username)
-
-      dispatch(addContact({contact: data.contact}))
-      closeModal()
-    } catch (error) {
-      setError(errorHandler(error))
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const {mutation, error} = useAddContactMutation()
 
   return (
     <Container>
       <Title>Add new contact</Title>
 
-      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={ContactSchema}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) => mutation.mutateAsync(values.username)}
+        validationSchema={ContactSchema}
+      >
         <Form>
           <TextInput name='username' type='text' label='Username' />
-          <Button>{loading ? 'Loading...' : 'Add'}</Button>
-          <ErrorContainer>{error}</ErrorContainer>
+          <Button>{mutation.isLoading ? 'Loading...' : 'Add'}</Button>
+          <ErrorContainer>{error ?? null}</ErrorContainer>
         </Form>
       </Formik>
     </Container>

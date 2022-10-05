@@ -1,10 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit'
-import contactsSlice from './reducers/contactsSlice'
 import conversationSlice from './reducers/conversationSlice'
 
 export const store = configureStore({
   reducer: {
-    contacts: contactsSlice,
     conversation: conversationSlice,
   },
   devTools: false,

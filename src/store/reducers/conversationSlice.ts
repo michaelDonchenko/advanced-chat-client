@@ -2,7 +2,7 @@ import {Conversation} from '@/interfaces/user-interfaces'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {getConversation} from '@/api/user-api'
-import errorHandler from '@/utils/error-handler'
+import errorHandler from '@/utils/errorHandler'
 
 export interface ConversationSlice {
   chosenConversationId: number | null

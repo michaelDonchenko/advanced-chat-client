@@ -1,11 +1,10 @@
-import {AxiosResponse} from 'axios'
 import {AuthCredentials, AuthResponse, logoutResponse} from '@/interfaces/auth-interfaces'
 import axiosInstance from './axios-instance'
 
-export const login = async (credentials: AuthCredentials): Promise<AxiosResponse<AuthResponse>> =>
-  await axiosInstance.post('/auth/login', credentials)
+export const login = (credentials: AuthCredentials): Promise<AuthResponse> =>
+  axiosInstance.post('/auth/login', credentials).then((response) => response.data)
 
-export const register = async (credentials: AuthCredentials): Promise<AxiosResponse<AuthResponse>> =>
-  await axiosInstance.post('/auth/register', credentials)
+export const register = (credentials: AuthCredentials): Promise<AuthResponse> =>
+  axiosInstance.post('/auth/register', credentials).then((response) => response.data)
 
-export const logout = async (): Promise<AxiosResponse<logoutResponse>> => await axiosInstance.get('/auth/logout')
+export const logout = (): Promise<logoutResponse> => axiosInstance.get('/auth/logout').then((response) => response.data)

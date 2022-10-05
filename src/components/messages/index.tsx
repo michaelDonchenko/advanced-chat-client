@@ -7,23 +7,17 @@ import {useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Message from './message'
 
-const Messages = () => {
+interface MessagesProps {
+  messages: MessageI[]
+}
+
+const Messages: React.FC<MessagesProps> = ({messages}) => {
   const {socket} = useSocketContext()
 
   const {conversation, chosenConversationId} = useAppSelector((state) => state.conversation)
   const dispatch = useAppDispatch()
   const bottomRef = useRef<HTMLDivElement>(null)
   const isVisible = useOnScreen(bottomRef)
-
-  useEffect(() => {
-    if (chosenConversationId) {
-      dispatch(fetchConversation(chosenConversationId))
-    }
-
-    return () => {
-      dispatch(resetConversation())
-    }
-  }, [chosenConversationId])
 
   useEffect(() => {
     socket.on('newMessage', (message: MessageI) => {
@@ -46,7 +40,7 @@ const Messages = () => {
 
   return (
     <Container>
-      {conversation?.messages?.map((message) => (
+      {messages.map((message) => (
         <Message message={message} key={message.id} />
       ))}
       <div ref={bottomRef}></div>

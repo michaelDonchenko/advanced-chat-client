@@ -1,7 +1,7 @@
 import RegularLink from '@/components/links/regular-link'
 import React from 'react'
 import styled from 'styled-components'
-import LoginForm from './login-form'
+import LoginForm from './loginForm'
 
 const Login: React.FC = () => {
   return (

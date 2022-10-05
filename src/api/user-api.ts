@@ -10,11 +10,11 @@ const defaultHeaders = () => {
   }
 }
 
-export const getContacts = async (): Promise<AxiosResponse<GetContactsResponse>> =>
-  await axiosInstance.get('/contact/get', {headers: defaultHeaders()})
+export const getContacts = (): Promise<GetContactsResponse> =>
+  axiosInstance.get('/contact/get', {headers: defaultHeaders()}).then((response) => response.data)
 
-export const createContact = async (username: string): Promise<AxiosResponse<CreateContactResponse>> =>
-  await axiosInstance.post('/contact/create', {username}, {headers: defaultHeaders()})
+export const createContact = (username: string): Promise<CreateContactResponse> =>
+  axiosInstance.post('/contact/create', {username}, {headers: defaultHeaders()}).then((response) => response.data)
 
-export const getConversation = async (id: number): Promise<AxiosResponse<ConversationResponse>> =>
-  await axiosInstance.get(`/conversation/${id}`, {headers: defaultHeaders()})
+export const getConversation = (id: number | null): Promise<ConversationResponse> =>
+  axiosInstance.get(`/conversation/${id}`, {headers: defaultHeaders()}).then((response) => response.data)

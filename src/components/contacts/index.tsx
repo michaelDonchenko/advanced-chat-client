@@ -1,26 +1,28 @@
+import {getContacts} from '@/api/user-api'
+import useContactsContext from '@/context/contactsContext'
 import useSocketContext from '@/context/socketContext'
 import {Contact} from '@/interfaces/user-interfaces'
-import {useAppDispatch, useAppSelector} from '@/store/hooks'
-import {addContact, fetchContacts} from '@/store/reducers/contactsSlice'
+import {useQuery} from '@tanstack/react-query'
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import ContactComponent from './contact'
 
 const Contacts: React.FC = () => {
-  const contacts = useAppSelector((state) => state.contacts.contacts)
-  const dispatch = useAppDispatch()
+  const {data, isLoading, isSuccess} = useQuery(['contacts'], getContacts)
+  const {contacts, setContacts, addContact} = useContactsContext()
   const {socket} = useSocketContext()
 
-  useEffect(() => {
-    dispatch(fetchContacts())
-  }, [])
+  if (isSuccess) {
+    setContacts(data.contacts)
+  }
 
   useEffect(() => {
-    socket.on('newContact', (contact: Contact) => dispatch(addContact({contact})))
+    socket.on('newContact', (contact: Contact) => addContact(contact))
   }, [])
 
   return (
     <Container>
+      {isLoading ? <p>Loading...</p> : null}
       {contacts?.map((contact) => (
         <ContactComponent key={contact.id} contact={contact} />
       ))}

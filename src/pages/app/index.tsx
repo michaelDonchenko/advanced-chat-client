@@ -5,38 +5,44 @@ import MessageInput from '@/components/inputs/message-input'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import Modal from '@/components/modals'
-import {useAppSelector} from '@/store/hooks'
 import AddContactModal from '@/components/modals/add-contact-modal'
 import useAuthContext from '@/context/authContext'
 import useSocketContext from '@/context/socketContext'
 import useModalContext from '@/context/modalContext'
+import useConversationContext from '@/context/conversationContext'
+import {useQuery} from '@tanstack/react-query'
+import {getConversation} from '@/api/user-api'
 
 const App: React.FC = () => {
   const {user} = useAuthContext()
   const {socket} = useSocketContext()
   const {isModalOpen, closeModal} = useModalContext()
+  const {activeConversationId} = useConversationContext()
+
+  const {data} = useQuery(['conversation', activeConversationId], () => getConversation(activeConversationId), {
+    enabled: typeof activeConversationId === 'number',
+  })
 
   const onModalClose = useCallback(() => closeModal(), [])
-  const {chosenConversationId, conversation} = useAppSelector((state) => state.conversation)
 
   const onNewMessage = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>, ref: React.MutableRefObject<null | HTMLInputElement>) => {
       if (ref.current?.value && event.key === 'Enter') {
-        if (!chosenConversationId) {
+        if (!data?.conversation) {
           return
         }
 
         const newMessage = {
           text: ref.current.value,
           from: user?.id,
-          conversationId: chosenConversationId,
+          conversationId: activeConversationId,
         }
 
-        socket.emit('message', {message: newMessage, conversation, myUserId: user?.id})
+        socket.emit('message', {message: newMessage, conversation: data.conversation, myUserId: user?.id})
         ref.current.value = ''
       }
     },
-    [chosenConversationId, user?.id, conversation]
+    [activeConversationId, user?.id, data?.conversation]
   )
 
   return (
@@ -47,13 +53,16 @@ const App: React.FC = () => {
         </SidebarWrapper>
 
         <MessagesWrapper>
-          {chosenConversationId ? <Messages /> : <StyledH2>Please choose or create contact</StyledH2>}
+          {!activeConversationId && <StyledH2>Please choose or create contact</StyledH2>}
 
-          {chosenConversationId && (
-            <InputContainer>
-              <MessageInput onSubmit={onNewMessage} />
-              <StyledIcon />
-            </InputContainer>
+          {data && (
+            <>
+              <Messages messages={data.conversation.messages} />
+              <InputContainer>
+                <MessageInput onSubmit={onNewMessage} />
+                <StyledIcon />
+              </InputContainer>
+            </>
           )}
         </MessagesWrapper>
       </Container>
@@ -103,8 +112,10 @@ const StyledIcon = styled(IoSendSharp)`
 `
 
 const StyledH2 = styled.h2`
-  text-align: center;
   margin-top: 16px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
 `
 
 export default App

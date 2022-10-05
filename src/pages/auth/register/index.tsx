@@ -1,7 +1,7 @@
 import RegularLink from '@/components/links/regular-link'
 import React from 'react'
 import styled from 'styled-components'
-import RegisterForm from './register-form'
+import RegisterForm from './registerForm'
 
 const Register: React.FC = () => {
   return (
