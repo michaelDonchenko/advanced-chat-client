@@ -1,14 +1,18 @@
-import useConversationContext from '@/context/conversationContext'
 import {Contact} from '@/interfaces/user-interfaces'
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
+import {useNavigate} from 'react-router-dom'
+import useQueryParams from '@/hooks/useQueryParams'
 
-const ContactComponent: React.FC<{contact: Contact}> = (props) => {
+const ContactComponent: React.FC<{contact: Contact}> = React.memo((props) => {
   const {photo, username, conversationId} = props.contact
-  const {setActiveConversationId, activeConversationId} = useConversationContext()
-  const isActiveChat = conversationId === activeConversationId
+  const queryParams = useQueryParams()
+  const navigate = useNavigate()
 
-  const onClick = useCallback(() => setActiveConversationId(conversationId), [conversationId])
+  const activeConversationId = queryParams.get('conversation_id')
+  const isActiveChat = conversationId === (activeConversationId && +activeConversationId)
+
+  const onClick = useCallback(() => navigate(`/?conversation_id=${conversationId}`), [conversationId])
 
   return (
     <Container isActiveChat={isActiveChat}>
@@ -24,7 +28,7 @@ const ContactComponent: React.FC<{contact: Contact}> = (props) => {
       </InfoSection>
     </Container>
   )
-}
+})
 
 const Container = styled.div<{isActiveChat: boolean}>`
   display: flex;
