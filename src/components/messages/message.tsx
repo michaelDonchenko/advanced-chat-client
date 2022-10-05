@@ -2,6 +2,7 @@ import React from 'react'
 import useAuthContext from '@/context/authContext'
 import {Message as MessageI} from '@/interfaces/user-interfaces'
 import styled from 'styled-components'
+import moment from 'moment'
 
 const Message = React.memo(({message}: {message: MessageI}) => {
   const {user} = useAuthContext()
@@ -10,7 +11,7 @@ const Message = React.memo(({message}: {message: MessageI}) => {
   return (
     <StyledMessage isMyMessage={isMyMessage}>
       <p>{message.text}</p>
-      <CreatedAt>{message.createdAt.toString()}</CreatedAt>
+      <CreatedAt>{moment(message.createdAt).format('MMMM Do YYYY, h:mm:ss')}</CreatedAt>
     </StyledMessage>
   )
 })
@@ -19,7 +20,7 @@ const StyledMessage = styled.div<{isMyMessage: boolean}>`
   width: fit-content;
   max-width: 500px;
   border-radius: 15px;
-  padding: 4px 8px;
+  padding: 6px 10px;
   background-color: ${({theme, isMyMessage}) => (isMyMessage ? theme.palette.primary.main : theme.palette.gray.main)};
   margin-bottom: 8px;
   margin-left: ${({isMyMessage}) => (isMyMessage ? 'auto' : '0')};
@@ -28,7 +29,8 @@ const StyledMessage = styled.div<{isMyMessage: boolean}>`
 
 const CreatedAt = styled.p`
   text-align: right;
-  margin-top: 2px;
+  margin-top: 6px;
+  font-size: 14px;
 `
 
 export default Message

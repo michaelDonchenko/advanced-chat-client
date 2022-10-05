@@ -5,12 +5,13 @@ import styled from 'styled-components'
 
 const ContactComponent: React.FC<{contact: Contact}> = (props) => {
   const {photo, username, conversationId} = props.contact
-  const {setActiveConversationId} = useConversationContext()
+  const {setActiveConversationId, activeConversationId} = useConversationContext()
+  const isActiveChat = conversationId === activeConversationId
 
   const onClick = useCallback(() => setActiveConversationId(conversationId), [conversationId])
 
   return (
-    <Container>
+    <Container isActiveChat={isActiveChat}>
       <Avatar onClick={onClick} alt='Avatar image' src={photo} />
       <NameSection onClick={onClick}>
         <p>{username}</p>
@@ -25,11 +26,12 @@ const ContactComponent: React.FC<{contact: Contact}> = (props) => {
   )
 }
 
-const Container = styled.div`
+const Container = styled.div<{isActiveChat: boolean}>`
   display: flex;
   width: 100%;
   padding: 10px 8px;
   transition: all 0.2s;
+  background-color: ${({theme, isActiveChat}) => (isActiveChat ? theme.palette.background.light : null)};
 
   &:hover {
     background-color: ${({theme}) => theme.palette.background.light};

@@ -20,9 +20,7 @@ const Modal: React.FC<ModalProps> = ({onModalClose, Content}) => {
   }, [])
 
   useEffect(() => {
-    setTimeout(() => {
-      window.addEventListener('click', clickListener)
-    }, 100)
+    window.addEventListener('click', clickListener)
 
     return () => {
       window.removeEventListener('click', clickListener)
