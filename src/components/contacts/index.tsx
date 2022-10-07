@@ -22,10 +22,15 @@ const Contacts: React.FC = () => {
 
   return (
     <Container>
-      {isLoading ? <p>Loading...</p> : null}
-      {contacts?.map((contact) => (
-        <ContactComponent key={contact.id} contact={contact} />
-      ))}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          {contacts?.map((contact) => (
+            <ContactComponent key={contact.id} contact={contact} />
+          ))}
+        </>
+      )}
     </Container>
   )
 }

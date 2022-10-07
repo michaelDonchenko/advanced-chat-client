@@ -6,52 +6,14 @@ import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import Modal from '@/components/modals'
 import AddContactModal from '@/components/modals/add-contact-modal'
-import useAuthContext from '@/context/authContext'
-import useSocketContext from '@/context/socketContext'
 import useModalContext from '@/context/modalContext'
-import useConversationContext from '@/context/conversationContext'
-import {useQuery} from '@tanstack/react-query'
-import {getConversation} from '@/api/user-api'
 import useQueryParams from '@/hooks/useQueryParams'
 
 const App: React.FC = () => {
-  const {user} = useAuthContext()
-  const {socket} = useSocketContext()
   const {isModalOpen, closeModal} = useModalContext()
-  const {setConversation, conversation} = useConversationContext()
+  const onModalClose = useCallback(() => closeModal(), [])
   const queryParams = useQueryParams()
   const conversationId = Number(queryParams.get('conversation_id'))
-
-  console.log(conversationId)
-
-  useQuery(
-    ['conversation', conversationId],
-    () => getConversation((typeof conversationId === 'string' && +conversationId) || null),
-    {
-      enabled: typeof conversationId === 'string',
-      onSuccess: (data) => {
-        setConversation(data.conversation)
-      },
-    }
-  )
-
-  const onModalClose = useCallback(() => closeModal(), [])
-
-  const onNewMessage = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>, ref: React.MutableRefObject<null | HTMLInputElement>) => {
-      if (ref.current?.value && event.key === 'Enter') {
-        const newMessage = {
-          text: ref.current.value,
-          from: user?.id,
-          conversationId: conversationId ? +conversationId : null,
-        }
-
-        socket.emit('message', {message: newMessage, conversation: conversation, myUserId: user?.id})
-        ref.current.value = ''
-      }
-    },
-    [conversationId]
-  )
 
   return (
     <>
@@ -61,13 +23,17 @@ const App: React.FC = () => {
         </SidebarWrapper>
 
         <MessagesWrapper>
-          {!conversation && <StyledH2>Please choose or create contact</StyledH2>}
-
-          <Messages messages={conversation?.messages || []} />
-          <InputContainer>
-            <MessageInput onSubmit={onNewMessage} />
-            <StyledIcon />
-          </InputContainer>
+          {!conversationId ? (
+            <StyledH2>Please choose or create contact</StyledH2>
+          ) : (
+            <>
+              <Messages />
+              <InputContainer>
+                <MessageInput />
+                <StyledIcon />
+              </InputContainer>
+            </>
+          )}
         </MessagesWrapper>
       </Container>
       {isModalOpen && <Modal onModalClose={onModalClose} Content={<AddContactModal />} />}

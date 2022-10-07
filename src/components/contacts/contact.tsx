@@ -9,8 +9,8 @@ const ContactComponent: React.FC<{contact: Contact}> = React.memo((props) => {
   const queryParams = useQueryParams()
   const navigate = useNavigate()
 
-  const activeConversationId = queryParams.get('conversation_id')
-  const isActiveChat = conversationId === (activeConversationId && +activeConversationId)
+  const activeConversationId = Number(queryParams.get('conversation_id'))
+  const isActiveChat = conversationId === activeConversationId
 
   const onClick = useCallback(() => navigate(`/?conversation_id=${conversationId}`), [conversationId])
 

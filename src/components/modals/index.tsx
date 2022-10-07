@@ -8,7 +8,7 @@ interface ModalProps {
   Content: JSX.Element
 }
 
-const Modal: React.FC<ModalProps> = ({onModalClose, Content}) => {
+const Modal: React.FC<ModalProps> = React.memo(({onModalClose, Content}) => {
   const modalRef = useRef<HTMLDivElement | null>(null)
 
   const clickListener = useCallback((event: MouseEvent) => {
@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({onModalClose, Content}) => {
       </Container>
     </Portal>
   )
-}
+})
 
 const Container = styled.div`
   position: absolute;

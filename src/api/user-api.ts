@@ -1,5 +1,4 @@
 import axiosInstance from './axios-instance'
-import {AxiosResponse} from 'axios'
 import {ConversationResponse, CreateContactResponse, GetContactsResponse} from '@/interfaces/user-interfaces'
 import {getLocalStorage} from '@/utils/localStorage'
 

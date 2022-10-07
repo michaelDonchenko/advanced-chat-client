@@ -1,49 +1,45 @@
+import {getConversation} from '@/api/user-api'
 import useConversationContext from '@/context/conversationContext'
-import useSocketContext from '@/context/socketContext'
 import useOnScreen from '@/hooks/useOnScreen'
 import useQueryParams from '@/hooks/useQueryParams'
-import {Message as MessageI} from '@/interfaces/user-interfaces'
-import {useEffect, useRef} from 'react'
+import {useQuery} from '@tanstack/react-query'
+import React, {useEffect, useRef} from 'react'
 import styled from 'styled-components'
 import Message from './message'
+import MessagesSideEffects from './messageSideEffects'
 
-interface MessagesProps {
-  messages: MessageI[]
-}
-
-const Messages: React.FC<MessagesProps> = ({messages}) => {
-  const {socket} = useSocketContext()
-  const {addMessage} = useConversationContext()
+const Messages: React.FC = () => {
+  const {setConversation, conversation} = useConversationContext()
   const queryParams = useQueryParams()
-  const activeConversationId = queryParams.get('conversation_id')
-
+  const conversationId = Number(queryParams.get('conversation_id'))
   const bottomRef = useRef<HTMLDivElement>(null)
   const isVisible = useOnScreen(bottomRef)
 
-  useEffect(() => {
-    socket.on('newMessage', (message: MessageI) => {
-      if (message.conversationId === (activeConversationId && +activeConversationId)) {
-        addMessage(message)
-      }
-    })
-
-    socket.on('selfMessage', (message: MessageI) => {
-      if (message.conversationId === (activeConversationId && +activeConversationId)) {
-        addMessage(message)
-      }
-    })
-  }, [activeConversationId])
+  const {isLoading} = useQuery(['conversation', conversationId], () => getConversation(conversationId), {
+    enabled: conversationId !== 0,
+    onSuccess: (data) => {
+      setConversation(data.conversation)
+    },
+  })
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'})
-  }, [isVisible, activeConversationId])
+  }, [isVisible, conversationId])
 
   return (
     <Container>
-      {messages.map((message) => (
-        <Message message={message} key={message.id} />
-      ))}
+      {isLoading ? (
+        <h3>Loading...</h3>
+      ) : (
+        <>
+          {conversation?.messages.map((message) => (
+            <Message message={message} key={message.id} />
+          ))}
+        </>
+      )}
+
       <div ref={bottomRef}></div>
+      <MessagesSideEffects />
     </Container>
   )
 }
