@@ -13,10 +13,7 @@ const MessagesSideEffects = React.memo(() => {
   useEffect(() => {
     socket.on('newMessage', (message: Message) => {
       if (message.conversationId === conversationId) {
-        return addMessage(message)
-      }
-      return () => {
-        socket.off()
+        addMessage(message)
       }
     })
 
@@ -25,6 +22,7 @@ const MessagesSideEffects = React.memo(() => {
         addMessage(message)
       }
     })
+
     return () => {
       socket.off()
     }

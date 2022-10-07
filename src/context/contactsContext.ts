@@ -8,6 +8,7 @@ interface ContactsContext {
   setContacts: (contacts: Contact[]) => void
   clearContacts: () => void
   addContact: (contact: Contact) => void
+  updateContactValues: (contact: Contact) => void
 }
 
 const useContactsContext = create<ContactsContext>()(
@@ -27,6 +28,15 @@ const useContactsContext = create<ContactsContext>()(
       addContact: (contact) => {
         set((state) => {
           state.contacts.unshift(contact)
+        })
+      },
+      updateContactValues: (updatedContact) => {
+        set((state) => {
+          const contactPosition = state.contacts.findIndex((contact) => contact.id === updatedContact.id)
+          if (contactPosition === -1) {
+            return
+          }
+          state.contacts[contactPosition] = updatedContact
         })
       },
     })),

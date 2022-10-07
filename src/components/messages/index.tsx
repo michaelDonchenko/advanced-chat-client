@@ -24,6 +24,8 @@ const Messages: React.FC = () => {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: 'smooth'})
+
+    return () => {}
   }, [isVisible, conversationId])
 
   return (

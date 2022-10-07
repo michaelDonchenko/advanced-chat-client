@@ -10,6 +10,12 @@ export interface Contact {
   photo: string
   conversationId: number
   userId: number
+  unreadMessages: number
+  lastMessage: {
+    text: string
+    updatedAt: string
+  }
+  status: 'online' | 'offline'
 }
 
 export interface Conversation {

@@ -23,6 +23,7 @@ const MessageInput: React.FC = () => {
           text: ref.current.value,
           from: user?.id,
           conversationId: conversationId,
+          createdAt: new Date(),
         }
 
         socket.emit('message', {message: newMessage, conversation: conversation, myUserId: user?.id})

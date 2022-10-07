@@ -3,29 +3,28 @@ import React, {useCallback} from 'react'
 import styled from 'styled-components'
 import {useNavigate} from 'react-router-dom'
 import useQueryParams from '@/hooks/useQueryParams'
+import moment from 'moment'
 
 const ContactComponent: React.FC<{contact: Contact}> = React.memo((props) => {
-  const {photo, username, conversationId} = props.contact
+  const {photo, username, conversationId, unreadMessages, lastMessage} = props.contact
   const queryParams = useQueryParams()
   const navigate = useNavigate()
-
   const activeConversationId = Number(queryParams.get('conversation_id'))
   const isActiveChat = conversationId === activeConversationId
-
   const onClick = useCallback(() => navigate(`/?conversation_id=${conversationId}`), [conversationId])
 
   return (
     <Container isActiveChat={isActiveChat}>
       <Avatar onClick={onClick} alt='Avatar image' src={photo} />
-      <NameSection onClick={onClick}>
-        <p>{username}</p>
-        <LastMessage>Last message</LastMessage>
-      </NameSection>
-
-      <InfoSection>
-        <p>08:12</p>
-        <UnreadMessages>4</UnreadMessages>
+      <InfoSection onClick={onClick}>
+        <h3>{username}</h3>
+        <LastMessage>{lastMessage ? lastMessage.text : 'No messages yet'}</LastMessage>
+        <LastMessageDate>
+          {lastMessage ? `Last message: ${moment(lastMessage.updatedAt).format('L')}` : null}
+        </LastMessageDate>
       </InfoSection>
+
+      {unreadMessages ? <UnreadMessages>{unreadMessages}</UnreadMessages> : null}
     </Container>
   )
 })
@@ -47,9 +46,10 @@ const Avatar = styled.img`
   height: 50px;
   border-radius: 50%;
   cursor: pointer;
+  margin-right: 6px;
 `
 
-const NameSection = styled.div`
+const InfoSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,22 +57,25 @@ const NameSection = styled.div`
   flex: 1;
   cursor: pointer;
 `
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-`
 
 const LastMessage = styled.p`
+  color: ${({theme}) => theme.palette.text};
+  margin-top: 4px;
+`
+const LastMessageDate = styled.p`
   color: ${({theme}) => theme.palette.gray.main};
+  font-size: 14px;
 `
 
 const UnreadMessages = styled.div`
-  margin-top: 4px;
-  padding: 0 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
   border-radius: 15px;
-  background-color: ${({theme}) => theme.palette.primary.dark};
+  background-color: ${({theme}) => theme.palette.primary.main};
+  font-size: 14px;
 `
 
 export default ContactComponent

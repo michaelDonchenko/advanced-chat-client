@@ -11,7 +11,7 @@ const Message = React.memo(({message}: {message: MessageI}) => {
   return (
     <StyledMessage isMyMessage={isMyMessage}>
       <p>{message.text}</p>
-      <CreatedAt>{moment(message.createdAt).format('MMMM Do YYYY, h:mm:ss')}</CreatedAt>
+      <CreatedAt>{moment(message.createdAt).format('lll')}</CreatedAt>
     </StyledMessage>
   )
 })

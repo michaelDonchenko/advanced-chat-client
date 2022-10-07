@@ -1,6 +1,7 @@
 import {getContacts} from '@/api/user-api'
 import useContactsContext from '@/context/contactsContext'
 import useSocketContext from '@/context/socketContext'
+import useQueryParams from '@/hooks/useQueryParams'
 import {Contact} from '@/interfaces/user-interfaces'
 import {useQuery} from '@tanstack/react-query'
 import React, {useEffect} from 'react'
@@ -13,12 +14,21 @@ const Contacts: React.FC = () => {
       setContacts(data.contacts)
     },
   })
-  const {contacts, setContacts, addContact} = useContactsContext()
+  const {contacts, setContacts, addContact, updateContactValues} = useContactsContext()
+  const queryParams = useQueryParams()
+  const conversationId = queryParams.get('conversation_id')
+
   const {socket} = useSocketContext()
 
   useEffect(() => {
     socket.on('newContact', (contact: Contact) => addContact(contact))
-  }, [])
+    socket.on('updateContactValues', (contact: Contact) => updateContactValues(contact))
+    socket.on('updateMyContact', (contact: Contact) => updateContactValues(contact))
+
+    return () => {
+      socket.off()
+    }
+  }, [conversationId])
 
   return (
     <Container>
