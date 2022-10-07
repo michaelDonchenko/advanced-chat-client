@@ -30,7 +30,7 @@ const StyledMessage = styled.div<{isMyMessage: boolean}>`
 const CreatedAt = styled.p`
   text-align: right;
   margin-top: 6px;
-  font-size: 14px;
+  font-size: 12px;
 `
 
 export default Message

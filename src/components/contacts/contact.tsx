@@ -9,9 +9,12 @@ const ContactComponent: React.FC<{contact: Contact}> = React.memo((props) => {
   const {photo, username, conversationId, unreadMessages, lastMessage} = props.contact
   const queryParams = useQueryParams()
   const navigate = useNavigate()
+
   const activeConversationId = Number(queryParams.get('conversation_id'))
   const isActiveChat = conversationId === activeConversationId
-  const onClick = useCallback(() => navigate(`/?conversation_id=${conversationId}`), [conversationId])
+  const onClick = useCallback(() => {
+    navigate(`/?conversation_id=${conversationId}`)
+  }, [conversationId])
 
   return (
     <Container isActiveChat={isActiveChat}>
@@ -63,7 +66,7 @@ const LastMessage = styled.p`
   margin-top: 4px;
 `
 const LastMessageDate = styled.p`
-  color: ${({theme}) => theme.palette.gray.main};
+  color: ${({theme}) => theme.palette.primary.light};
   font-size: 14px;
 `
 
@@ -74,7 +77,7 @@ const UnreadMessages = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 15px;
-  background-color: ${({theme}) => theme.palette.primary.main};
+  background-color: ${({theme}) => theme.palette.primary.light};
   font-size: 14px;
 `
 

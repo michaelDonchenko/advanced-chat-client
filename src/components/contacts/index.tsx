@@ -1,4 +1,5 @@
 import {getContacts} from '@/api/user-api'
+import useAuthContext from '@/context/authContext'
 import useContactsContext from '@/context/contactsContext'
 import useSocketContext from '@/context/socketContext'
 import useQueryParams from '@/hooks/useQueryParams'
@@ -16,7 +17,8 @@ const Contacts: React.FC = () => {
   })
   const {contacts, setContacts, addContact, updateContactValues} = useContactsContext()
   const queryParams = useQueryParams()
-  const conversationId = queryParams.get('conversation_id')
+  const conversationId = Number(queryParams.get('conversation_id'))
+  const {user} = useAuthContext()
 
   const {socket} = useSocketContext()
 
@@ -24,6 +26,7 @@ const Contacts: React.FC = () => {
     socket.on('newContact', (contact: Contact) => addContact(contact))
     socket.on('updateContactValues', (contact: Contact) => updateContactValues(contact))
     socket.on('updateMyContact', (contact: Contact) => updateContactValues(contact))
+    socket.emit('conversationChange', {conversationId, myUserId: user?.id})
 
     return () => {
       socket.off()
