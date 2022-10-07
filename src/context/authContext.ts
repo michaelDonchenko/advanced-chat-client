@@ -15,7 +15,7 @@ interface AuthContext {
 
 const useAuthContext = create<AuthContext>()(
   devtools(
-    immer((set, get) => ({
+    immer((set) => ({
       user: getLocalStorage('user') ?? null,
       isAuthenticated: getLocalStorage('jwt') ?? null,
       jwt: getLocalStorage('isAuthenticated') ?? false,

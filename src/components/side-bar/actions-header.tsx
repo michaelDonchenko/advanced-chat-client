@@ -45,7 +45,7 @@ const ActionsHeader: React.FC = () => {
 
       <SearchContainer>
         <SearchIcon size={16} />
-        <SearchBar placeholder='Search for chats' />
+        <SearchBar placeholder='Search contacts' />
       </SearchContainer>
     </Container>
   )

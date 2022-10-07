@@ -1,6 +1,5 @@
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
-import {IoSendSharp} from 'react-icons/io5'
 import MessageInput from '@/components/inputs/message-input'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
@@ -28,10 +27,7 @@ const App: React.FC = () => {
           ) : (
             <>
               <Messages />
-              <InputContainer>
-                <MessageInput />
-                <StyledIcon />
-              </InputContainer>
+              <MessageInput />
             </>
           )}
         </MessagesWrapper>
@@ -65,20 +61,6 @@ const MessagesWrapper = styled.div`
   @media (max-width: ${({theme}) => theme.breakpoints.mobile}) {
     width: 50%;
   }
-`
-const InputContainer = styled.div`
-  width: 100%;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-`
-
-const StyledIcon = styled(IoSendSharp)`
-  fill: ${({theme}) => theme.palette.primary.light};
-  width: 30px;
-  height: 30px;
-  margin: 0 10px;
-  cursor: pointer;
 `
 
 const StyledH2 = styled.h2`
