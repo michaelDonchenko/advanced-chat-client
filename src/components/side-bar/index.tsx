@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Contacts from '../contacts'
-import ActionsHeader from './actions-header'
+import ActionsHeader from './actionsHeader'
 
 const SideBar: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
-import {AuthResponse} from '@/interfaces/auth-interfaces'
-import {User} from '@/interfaces/user-interfaces'
+import {AuthResponse} from '@/interfaces'
+import {User} from '@/interfaces'
 import {getLocalStorage} from '@/utils/localStorage'
 import create from 'zustand'
 import {devtools} from 'zustand/middleware'

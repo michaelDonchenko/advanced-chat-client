@@ -1,5 +1,5 @@
 import Button from '@/components/buttons/button'
-import TextInput from '@/components/inputs/text-input'
+import TextInput from '@/components/inputs/textInput'
 import {Formik, Form} from 'formik'
 import styled from 'styled-components'
 import useLoginMutation, {FormValues} from '@/hooks/mutations/useLoginMutation'

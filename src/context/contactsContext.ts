@@ -1,4 +1,4 @@
-import {Contact} from '@/interfaces/user-interfaces'
+import {Contact} from '@/interfaces'
 import create from 'zustand'
 import {devtools} from 'zustand/middleware'
 import {immer} from 'zustand/middleware/immer'

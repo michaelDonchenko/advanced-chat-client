@@ -1,4 +1,4 @@
-import {Conversation, Message} from '@/interfaces/user-interfaces'
+import {Conversation, Message} from '@/interfaces'
 import create from 'zustand'
 import {devtools} from 'zustand/middleware'
 import {immer} from 'zustand/middleware/immer'

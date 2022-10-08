@@ -1,5 +1,5 @@
-import axiosInstance from './axios-instance'
-import {ConversationResponse, CreateContactResponse, GetContactsResponse} from '@/interfaces/user-interfaces'
+import axiosInstance from './axiosInstance'
+import {ConversationResponse, CreateContactResponse, GetContactsResponse} from '@/interfaces'
 import {getLocalStorage} from '@/utils/localStorage'
 
 const defaultHeaders = () => {

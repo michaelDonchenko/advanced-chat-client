@@ -1,5 +1,5 @@
 import Button from '@/components/buttons/button'
-import TextInput from '@/components/inputs/text-input'
+import TextInput from '@/components/inputs/textInput'
 import useRegisterMutation from '@/hooks/mutations/useRegisterMutation'
 import {AuthCredentials} from '@/interfaces/auth-interfaces'
 import {Formik, Form} from 'formik'

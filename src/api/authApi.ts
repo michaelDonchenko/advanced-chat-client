@@ -1,5 +1,5 @@
 import {AuthCredentials, AuthResponse, logoutResponse} from '@/interfaces/auth-interfaces'
-import axiosInstance from './axios-instance'
+import axiosInstance from './axiosInstance'
 
 export const login = (credentials: AuthCredentials): Promise<AuthResponse> =>
   axiosInstance.post('/auth/login', credentials).then((response) => response.data)

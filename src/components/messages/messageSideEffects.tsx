@@ -1,7 +1,7 @@
 import useConversationContext from '@/context/conversationContext'
 import useSocketContext from '@/context/socketContext'
 import useQueryParams from '@/hooks/useQueryParams'
-import {Message} from '@/interfaces/user-interfaces'
+import {Message} from '@/interfaces'
 import React, {useEffect} from 'react'
 
 const MessagesSideEffects = React.memo(() => {

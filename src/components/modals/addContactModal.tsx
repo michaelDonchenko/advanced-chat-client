@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Button from '../buttons/button'
-import TextInput from '../inputs/text-input'
+import TextInput from '../inputs/textInput'
 import {Formik, Form} from 'formik'
 import * as Yup from 'yup'
 import useAddContactMutation from '@/hooks/mutations/useAddContactMutation'

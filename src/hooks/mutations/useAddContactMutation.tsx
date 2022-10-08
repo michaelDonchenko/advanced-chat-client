@@ -1,6 +1,6 @@
 import {useMutation} from '@tanstack/react-query'
 import {useState} from 'react'
-import {createContact} from '@/api/user-api'
+import {createContact} from '@/api/userApi'
 import useModalContext from '@/context/modalContext'
 import errorHandler from '@/utils/errorHandler'
 import useContactsContext from '@/context/contactsContext'

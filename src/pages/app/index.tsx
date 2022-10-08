@@ -1,18 +1,23 @@
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
-import MessageInput from '@/components/inputs/message-input'
+import MessageInput from '@/components/inputs/messageInput'
 import Messages from '@/components/messages'
 import SideBar from '@/components/side-bar'
 import Modal from '@/components/modals'
-import AddContactModal from '@/components/modals/add-contact-modal'
-import useModalContext from '@/context/modalContext'
+import AddContactModal from '@/components/modals/addContactModal'
+import useModalContext, {ModalsMap} from '@/context/modalContext'
 import useQueryParams from '@/hooks/useQueryParams'
 
 const App: React.FC = () => {
-  const {isModalOpen, closeModal} = useModalContext()
+  const {isModalOpen, closeModal, currentModal} = useModalContext()
   const onModalClose = useCallback(() => closeModal(), [])
   const queryParams = useQueryParams()
   const conversationId = Number(queryParams.get('conversation_id'))
+
+  const modalsMap: ModalsMap = {
+    '1': <></>,
+    '2': <AddContactModal />,
+  }
 
   return (
     <>
@@ -32,7 +37,7 @@ const App: React.FC = () => {
           )}
         </MessagesWrapper>
       </Container>
-      {isModalOpen && <Modal onModalClose={onModalClose} Content={<AddContactModal />} />}
+      {isModalOpen && currentModal && <Modal onModalClose={onModalClose} Content={modalsMap[currentModal]} />}
     </>
   )
 }

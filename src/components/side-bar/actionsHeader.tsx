@@ -21,8 +21,12 @@ const ActionsHeader: React.FC = () => {
 
   const menuItems = [
     {
+      label: 'My Profile',
+      onClick: () => openModal('1'), // id one will open profile modal
+    },
+    {
       label: 'Add Contact',
-      onClick: () => openModal(),
+      onClick: () => openModal('2'), // id two will open add contact modal
     },
     {
       label: 'Logout',

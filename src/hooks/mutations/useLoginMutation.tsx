@@ -1,4 +1,4 @@
-import {login} from '@/api/auth-api'
+import {login} from '@/api/authApi'
 import useAuthContext from '@/context/authContext'
 import useSocketContext from '@/context/socketContext'
 import errorHandler from '@/utils/errorHandler'

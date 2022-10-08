@@ -1,4 +1,4 @@
-import {Contact} from '@/interfaces/user-interfaces'
+import {Contact} from '@/interfaces'
 import React, {useCallback} from 'react'
 import styled from 'styled-components'
 import {useNavigate} from 'react-router-dom'

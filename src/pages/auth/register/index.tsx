@@ -1,4 +1,4 @@
-import RegularLink from '@/components/links/regular-link'
+import RegularLink from '@/components/links/defaultLink'
 import React from 'react'
 import styled from 'styled-components'
 import RegisterForm from './registerForm'

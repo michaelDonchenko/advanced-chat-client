@@ -1,4 +1,4 @@
-import {getConversation} from '@/api/user-api'
+import {getConversation} from '@/api/userApi'
 import useConversationContext from '@/context/conversationContext'
 import useOnScreen from '@/hooks/useOnScreen'
 import useQueryParams from '@/hooks/useQueryParams'
