@@ -15,7 +15,8 @@ const Contacts: React.FC = () => {
       setContacts(data.contacts)
     },
   })
-  const {contacts, setContacts, addContact, updateContactValues} = useContactsContext()
+  const {filteredContacts, setContacts, addContact, updateContactValues, filterKey, filterContacts, contacts} =
+    useContactsContext()
   const queryParams = useQueryParams()
   const conversationId = Number(queryParams.get('conversation_id'))
   const {user} = useAuthContext()
@@ -33,15 +34,21 @@ const Contacts: React.FC = () => {
     }
   }, [conversationId])
 
+  useEffect(() => {
+    filterContacts()
+  }, [filterKey, contacts])
+
   return (
     <Container>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
-          {contacts?.map((contact) => (
-            <ContactComponent key={contact.id} contact={contact} />
-          ))}
+          {filteredContacts && filteredContacts.length > 0 ? (
+            filteredContacts?.map((contact) => <ContactComponent key={contact.id} contact={contact} />)
+          ) : (
+            <StyledParagraph>No contacts found</StyledParagraph>
+          )}
         </>
       )}
     </Container>
@@ -67,6 +74,10 @@ const Container = styled.section`
     background-color: ${({theme}) => theme.palette.gray.main};
     border-radius: 10px;
   }
+`
+
+const StyledParagraph = styled.p`
+  padding: 12px;
 `
 
 export default Contacts

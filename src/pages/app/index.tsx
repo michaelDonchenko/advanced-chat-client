@@ -2,22 +2,23 @@ import React, {useCallback} from 'react'
 import styled from 'styled-components'
 import MessageInput from '@/components/inputs/messageInput'
 import Messages from '@/components/messages'
-import SideBar from '@/components/side-bar'
+import SideBar from '@/components/sidebar'
 import Modal from '@/components/modals'
 import AddContactModal from '@/components/modals/addContactModal'
 import useModalContext, {ModalsMap} from '@/context/modalContext'
 import useQueryParams from '@/hooks/useQueryParams'
+import ProfileModal from '@/components/modals/profileModal'
+
+const modalsMap: ModalsMap = {
+  '1': <ProfileModal></ProfileModal>,
+  '2': <AddContactModal />,
+}
 
 const App: React.FC = () => {
   const {isModalOpen, closeModal, currentModal} = useModalContext()
   const onModalClose = useCallback(() => closeModal(), [])
   const queryParams = useQueryParams()
   const conversationId = Number(queryParams.get('conversation_id'))
-
-  const modalsMap: ModalsMap = {
-    '1': <></>,
-    '2': <AddContactModal />,
-  }
 
   return (
     <>

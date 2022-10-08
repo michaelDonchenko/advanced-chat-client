@@ -31,12 +31,14 @@ const Messages: React.FC = () => {
   return (
     <Container>
       {isLoading ? (
-        <h3>Loading...</h3>
+        <p>Loading...</p>
       ) : (
         <>
-          {conversation?.messages.map((message) => (
-            <Message message={message} key={message.id} />
-          ))}
+          {conversation && conversation?.messages?.length > 0 ? (
+            conversation?.messages.map((message) => <Message message={message} key={message.id} />)
+          ) : (
+            <p>No messages yet</p>
+          )}
         </>
       )}
 

@@ -7,13 +7,18 @@ import useAuthContext from '@/context/authContext'
 import useSocketContext from '@/context/socketContext'
 import useModalContext from '@/context/modalContext'
 import useConversationContext from '@/context/conversationContext'
+import useContactsContext from '@/context/contactsContext'
 
 const ActionsHeader: React.FC = () => {
   const authContext = useAuthContext()
   const {socket} = useSocketContext()
   const {openModal} = useModalContext()
+  const {setFilterKey} = useContactsContext()
   const {resetConversationState} = useConversationContext()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
+  const onFilter = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterKey(event.target.value)
+  }, [])
 
   const toggleMenu = useCallback(() => {
     setIsMenuVisible((prev) => !prev)
@@ -49,7 +54,7 @@ const ActionsHeader: React.FC = () => {
 
       <SearchContainer>
         <SearchIcon size={16} />
-        <SearchBar placeholder='Search contacts' />
+        <SearchBar defaultValue='' placeholder='Search contacts' onChange={onFilter} />
       </SearchContainer>
     </Container>
   )
