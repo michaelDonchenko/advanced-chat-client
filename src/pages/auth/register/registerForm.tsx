@@ -1,7 +1,7 @@
 import Button from '@/components/buttons/button'
 import TextInput from '@/components/inputs/textInput'
 import useRegisterMutation from '@/hooks/mutations/useRegisterMutation'
-import {AuthCredentials} from '@/interfaces/auth-interfaces'
+import {AuthCredentials} from '@/interfaces'
 import {Formik, Form} from 'formik'
 import styled from 'styled-components'
 import authValidationSchema from '../authValidationSchema'
@@ -22,8 +22,8 @@ const RegisterForm = () => {
         onSubmit={(values) => mutation.mutateAsync(values)}
       >
         <Form>
-          <TextInput name='username' type='text' label='Username' />
-          <TextInput name='password' type='password' label='Password' />
+          <TextInput name="username" type="text" label="Username" />
+          <TextInput name="password" type="password" label="Password" />
 
           <Button>{mutation.isLoading ? 'Loading...' : 'Register'}</Button>
           <ErrorContainer>{mutation.isError ? error : null}</ErrorContainer>
